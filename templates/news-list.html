@@ -1,0 +1,25 @@
+{% extends "__base_template.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Мои новости</h5>
+        {% if news_list  %}
+        <ul class="card-text">
+            {% for news in news_list %}
+            <li><a href="/news/{{ news.id }}">{{news.title}} </a>
+                {% if auth_user and auth_user.id == news.user_id %}
+                (<a href="/news/delete/{{ news.id }}">удалить</a>)
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        Новостей пока нет
+        {% endif %}
+        {% if auth_user %}
+        <a href="/news/create" class="card-link">Создать</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
