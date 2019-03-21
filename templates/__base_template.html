@@ -15,16 +15,13 @@
     <a href="/" class="navbar-brand">Главная</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a href="/" class="nav-link">Меню1</a>
-            </li>
-            <li class="nav-item">
-                <a href="/" class="nav-link">Меню2</a>
-            </li>
         </ul>
     </div>
     {% if auth_user %}
-    {{ auth_user.login }} (<a href="/logout">Выйти</a>)
+    {{ auth_user.login }} <a href="/logout">Выйти</a>
+    <div class="p-3">
+        <a href="/edit_profile">Редактировать профиль</a>
+    </div>
     {% else %}
     <div class="p-3">
         <a href="/login">Войти</a>

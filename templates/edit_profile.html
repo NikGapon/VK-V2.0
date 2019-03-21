@@ -1,11 +1,11 @@
 {% extends '__base_template.html' %}
 
 {% block content %}
+<h1>Редактировать профиль</h1>
 <form
-        action="/user/create"
+        action="/edit_profile"
         method="post"
         enctype="multipart/form-data"
-
         class="card"
 >
     {% if has_error %}
@@ -25,5 +25,3 @@
     </div>
 </form>
 {% endblock %}
-
-

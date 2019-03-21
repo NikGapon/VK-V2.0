@@ -1,10 +1,10 @@
 from flask_restful import abort
 
-from flask import Flask, redirect, session, request
+from flask import redirect, request, flash, session
 from flask import render_template as flask_render_template
 import extra.auth as auth
 from api.v1 import init as init_api_v1
-from forms import *
+from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm
 
 from models import User, News
 
@@ -33,38 +33,43 @@ def init_route(app, db):
             news_list=news_list
         )
 
-    @app.route('/install')
-    def install():
-        db.create_all()
-        return render_template(
-            'install-success.html',
-            title="Главная"
-        )
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        has_error = False
-        login = ''
-        if request.method == 'POST':
-            username = request.form['username']
-            if auth.login(username, request.form['password']):
-                return redirect('/')
-            else:
-                has_error = True
-        return render_template(
-            'login.html',
-            title='Вход',
-            login=login,
-            has_error=has_error
-        )
+        try:
+            form = LoginForm()
+            has_error = False
+            login = ''
+            if request.method == 'POST':
+                username = request.form['username']
 
+                if auth.login(username, request.form['password']):
+                    return redirect('/')
+                else:
+                    has_error = True
+            return render_template(
+                'login.html',
+                title='Вход',
+                login=login,
+                has_error=has_error
+            )
+        except:
+            return redirect('/nousers')
     @app.route('/logout', methods=['GET'])
     def logout():
         auth.logout()
         return redirect('/')
 
+    @app.route('/nousers')
+    def dbemty():
+        return render_template(
+            'dbempty.html',
+            title='Пользователей нет')
+
     @app.route('/user/create', methods=['GET', 'POST'])
     def registration():
+
+        db.create_all()
         has_error = False
         form = UserCreateForm()
         if form.validate_on_submit():
@@ -137,3 +142,32 @@ def init_route(app, db):
             abort(403)
         News.delete(news)
         return redirect('/news')
+
+    @app.route('/success')
+    def success():
+        return render_template(
+                'success.html',
+                title='Успех!')
+
+    @app.route('/edit_profile', methods=['GET', 'POST'])
+    def edit_profile():
+        form = EditProfileForm()
+        has_error = False
+        if form.validate_on_submit():
+            user = auth.get_user()
+            username = form.username.data
+            password = form.password.data
+            users = User.query.filter_by(username=username).first()
+            if users:
+                has_error = True
+            elif not has_error:
+                user.username = username
+                user.password = password
+                db.session.commit()
+                return redirect('/success')
+        return render_template(
+            'edit_profile.html',
+            title='Редактировать профиль',
+            form=form,
+            has_error=has_error
+        )
