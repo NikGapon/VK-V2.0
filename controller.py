@@ -55,13 +55,14 @@ def init_route(app, db):
             )
         except:
             return redirect('/nousers')
+
     @app.route('/logout', methods=['GET'])
     def logout():
         auth.logout()
         return redirect('/')
 
     @app.route('/nousers')
-    def dbemty():
+    def db_empty():
         return render_template(
             'dbempty.html',
             title='Пользователей нет')
@@ -71,22 +72,29 @@ def init_route(app, db):
 
         db.create_all()
         has_error = False
+        has_email_error = False
         form = UserCreateForm()
         if form.validate_on_submit():
             username = form.username.data
+            email = form.email.data
             password = form.password.data
+            about_me = form.about_me.data
             user = User.query.filter_by(username=username).first()
+
             if user:
                 has_error = True
+            elif '@' not in email:
+                has_error = True
             else:
-                User.add(username=username, password=password)
+                User.add(username=username, password=password, email=email, about_me=about_me)
                 auth.login(username, password)
                 return redirect('/')
         return render_template(
             'registration.html',
             title='Зарегистрироваться',
             form=form,
-            has_error=has_error
+            has_error=has_error,
+            has_email_error=has_email_error
         )
 
     @app.route('/news', methods=['GET'])
@@ -153,21 +161,32 @@ def init_route(app, db):
     def edit_profile():
         form = EditProfileForm()
         has_error = False
+        user = auth.get_user()
         if form.validate_on_submit():
-            user = auth.get_user()
+
             username = form.username.data
             password = form.password.data
+            about_me = form.about_me.data
             users = User.query.filter_by(username=username).first()
             if users:
-                has_error = True
-            elif not has_error:
+                if username != user.username:
+                    has_error = True
+            if not has_error:
                 user.username = username
-                user.password = password
+                if password != '':
+                    user.password = password
+                user.about_me = about_me
                 db.session.commit()
                 return redirect('/success')
+        else:
+            form.username.data = user.username
+            form.email.data = user.email
+            form.about_me.data = user.about_me
+
         return render_template(
             'edit_profile.html',
             title='Редактировать профиль',
             form=form,
             has_error=has_error
         )
+

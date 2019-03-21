@@ -5,13 +5,15 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    about_me = db.Column(db.String(1000), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User {} {}>'.format(self.id, self.username)
 
     @staticmethod
-    def add(username, password):
-        user = User(username=username, password=password)
+    def add(username, password, email,  about_me):
+        user = User(username=username, password=password, email=email, about_me=about_me)
         db.session.add(user)
         db.session.commit()
 

@@ -1,11 +1,15 @@
 {% extends "__base_template.html" %}
 
 {% block content %}
-<div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col align-self-center">
         <h3>{{ auth_user.username }}</h3>
         <!-- TODO -->
     </div>
+
+</div>
+<div>
+    <p>{{ auth_user.about_me }}</p>
 </div>
 <div class="card">
     <div class="card-body">
