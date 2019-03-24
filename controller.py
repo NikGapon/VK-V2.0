@@ -1,7 +1,10 @@
-from flask_restful import abort
+from os.path import join, dirname, realpath
 
-from flask import redirect, request, flash, session
+from flask_restful import abort
+import os
+from flask import redirect, request, flash, session, url_for, send_from_directory
 from flask import render_template as flask_render_template
+from werkzeug.utils import secure_filename
 import extra.auth as auth
 from api.v1 import init as init_api_v1
 from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm
@@ -9,7 +12,17 @@ from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm
 from models import User, News
 
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
 def init_route(app, db):
+
+    app.config['UPLOAD_FOLDER'] = join(dirname(realpath(__file__)), 'static')
 
     # Переопределение стандартного рендера, добавляет параметр auth_user
     def render_template(*args, **kwargs):
@@ -21,6 +34,7 @@ def init_route(app, db):
     @app.route('/')
     @app.route('/index')
     def index():
+        db.create_all()
         if not auth.is_authorized():
             return render_template(
                 'index.html',
@@ -28,11 +42,10 @@ def init_route(app, db):
             )
         news_list = News.query.filter_by(user_id=auth.get_user().id)
         return render_template(
-            'news-list.html',
+            'my_profile.html',
             title="Главная",
             news_list=news_list
         )
-
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -69,8 +82,6 @@ def init_route(app, db):
 
     @app.route('/user/create', methods=['GET', 'POST'])
     def registration():
-
-        db.create_all()
         has_error = False
         has_email_error = False
         form = UserCreateForm()
@@ -79,14 +90,21 @@ def init_route(app, db):
             email = form.email.data
             password = form.password.data
             about_me = form.about_me.data
+            avatar = form.avatar.data
+            print(avatar)
+            if avatar != '':
+                filename = secure_filename(avatar.filename)
+                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             user = User.query.filter_by(username=username).first()
-
             if user:
                 has_error = True
-            elif '@' not in email:
-                has_error = True
             else:
-                User.add(username=username, password=password, email=email, about_me=about_me)
+                if avatar != '':
+                    User.add(username=username, password=password, email=email, about_me=about_me,
+                             avatar=avatar)
+                else:
+                    User.add(username=username, password=password, email=email, about_me=about_me,
+                             avatar=url_for('static', filename='default.png'))
                 auth.login(username, password)
                 return redirect('/')
         return render_template(
@@ -102,8 +120,9 @@ def init_route(app, db):
         if not auth.is_authorized():
             return redirect('/login')
         news_list = News.query.filter_by(user_id=auth.get_user().id)
+
         return render_template(
-            'news-list.html',
+            'my_profile.html',
             title="Новости",
             news_list=news_list
         )
@@ -167,6 +186,11 @@ def init_route(app, db):
             username = form.username.data
             password = form.password.data
             about_me = form.about_me.data
+            avatar = form.avatar.data
+            if avatar != '':
+                filename = secure_filename(avatar.filename)
+                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                user.avatar = filename
             users = User.query.filter_by(username=username).first()
             if users:
                 if username != user.username:
@@ -176,6 +200,8 @@ def init_route(app, db):
                 if password != '':
                     user.password = password
                 user.about_me = about_me
+
+
                 db.session.commit()
                 return redirect('/success')
         else:

@@ -29,6 +29,10 @@
             <label for="{{ form.about_me.id }}">{{ form.about_me.label }}</label>
             {{ form.about_me(class_="form-control") }}
         </div>
+        <div class="form-group">
+            <label for="{{ form.avatar.id }}">{{ form.avatar.label }}</label>
+            {{ form.avatar(class_="form-control") }}
+        </div>
         {{ form.submit(class_="btn btn-primary") }}
     </div>
 </form>

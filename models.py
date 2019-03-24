@@ -5,6 +5,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
+    avatar = db.Column(db.String(120),  unique=False, nullable=False, default='static\default.png')
     email = db.Column(db.String(120), unique=True, nullable=False)
     about_me = db.Column(db.String(1000), unique=False, nullable=False)
 
@@ -12,8 +13,8 @@ class User(db.Model):
         return '<User {} {}>'.format(self.id, self.username)
 
     @staticmethod
-    def add(username, password, email,  about_me):
-        user = User(username=username, password=password, email=email, about_me=about_me)
+    def add(username, password, email,  about_me, avatar):
+        user = User(username=username, password=password, email=email, about_me=about_me, avatar=avatar)
         db.session.add(user)
         db.session.commit()
 
