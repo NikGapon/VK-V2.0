@@ -91,7 +91,7 @@ def init_route(app, db):
             password = form.password.data
             about_me = form.about_me.data
             avatar = form.avatar.data
-            print(avatar)
+
             user = User.query.filter_by(username=username).first()
             if user:
                 has_error = True
