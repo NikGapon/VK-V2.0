@@ -215,3 +215,7 @@ def init_route(app, db):
             has_error=has_error
         )
 
+    @app.route('/sms')
+    def sms():
+        return render_template('sms.html', title='test')
+
