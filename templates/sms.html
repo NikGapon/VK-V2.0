@@ -1,11 +1,36 @@
 {% extends "__base_template.html" %}
 
 {% block content %}
-
-<div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col align-self-center">
-        <h3>Успех!</h3>
+        <h3>{{ auth_user.username }}</h3>
         <!-- TODO -->
+    </div>
+
+</div>
+<div>
+    <p>{{ auth_user.about_me }}</p>
+</div>
+<img  src="{{auth_user.avatar}}" width="300px" height="300px">
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Мои сообщения</h5>
+        {% if news_list  %}
+        <ul class="card-text">
+            {% for news in news_list %}
+            <li><a href="/news/{{ news.id }}">{{news.title}} </a>
+                {% if auth_user and auth_user.id == news.user_id %}
+                (<a href="/news/delete/{{ news.id }}">удалить</a>)
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        Вам никто не пишет
+        {% endif %}
+        {% if auth_user %}
+        <a href="/news/create" class="card-link">Создать</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

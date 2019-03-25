@@ -215,7 +215,16 @@ def init_route(app, db):
             has_error=has_error
         )
 
-    @app.route('/sms')
+    @app.route('/sms', methods=['GET'])
     def sms():
-        return render_template('sms.html', title='test')
+
+        if not auth.is_authorized():
+            return redirect('/login')
+        news_list = News.query.filter_by(user_id=auth.get_user().id)
+
+        return render_template(
+            'my_profile.html',
+            title="Новости",
+            news_list=news_list
+            )
 
