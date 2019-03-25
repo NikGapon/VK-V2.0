@@ -24,6 +24,27 @@ class User(db.Model):
         db.session.commit()
 
 
+class Sms(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipient = db.Column(db.String(80), unique=True, nullable=False)
+    sender = db.Column(db.String(80), unique=True, nullable=False)
+    text = db.Column(db.String(80), unique=False, nullable=False)
+
+    @staticmethod
+    def add(title, content, user):
+        news = News(title=title, content=content, user=user)
+        db.session.add(news)
+        db.session.commit()
+        return news
+
+    @staticmethod
+    def delete(obj):
+        db.session.delete(obj)
+        db.session.commit()
+
+
+
+
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=False, nullable=False)
