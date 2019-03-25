@@ -220,11 +220,11 @@ def init_route(app, db):
 
         if not auth.is_authorized():
             return redirect('/login')
-        news_list = News.query.filter_by(user_id=auth.get_user().id)
+        sms = sms.query.filter_by(user_id=auth.get_user().id)
+
 
         return render_template(
-            'my_profile.html',
-            title="Новости",
-            news_list=news_list
+            title="Сообщения",
+            sms=sms
             )
 

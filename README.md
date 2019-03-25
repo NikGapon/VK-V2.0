@@ -14,6 +14,7 @@
 pip install flask
 pip install flask_restful
 pip install flask_wtf
+pip install flask-socketio
 ```
 
 ## Запуск
