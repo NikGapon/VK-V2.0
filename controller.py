@@ -92,16 +92,15 @@ def init_route(app, db):
             about_me = form.about_me.data
             avatar = form.avatar.data
             print(avatar)
-            if avatar != '':
-                filename = secure_filename(avatar.filename)
-                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             user = User.query.filter_by(username=username).first()
             if user:
                 has_error = True
             else:
                 if avatar != '':
+                    filename = secure_filename(avatar.filename)
+                    avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                     User.add(username=username, password=password, email=email, about_me=about_me,
-                             avatar=avatar)
+                             avatar=filename)
                 else:
                     User.add(username=username, password=password, email=email, about_me=about_me,
                              avatar=url_for('static', filename='default.png'))
