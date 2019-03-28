@@ -13,8 +13,10 @@ class NewsCreateForm(FlaskForm):
 
 
 class SmsCreateForm(FlaskForm):
-    recipient = StringField('Кому', validators=[DataRequired()])
-    text = SubmitField()
+    recipient = StringField('', validators=[DataRequired()])
+    text = TextAreaField('Текст')
+
+    submit = SubmitField('Войти')
 
 
 
