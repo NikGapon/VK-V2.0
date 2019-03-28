@@ -13,6 +13,7 @@ from controller import init_route
 from dbase import db
 
 
+
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'

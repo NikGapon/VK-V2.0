@@ -35,14 +35,18 @@ def init_route(app, db):
     @app.route('/index')
     def index():
         db.create_all()
+        news_list = News.query
+
         if not auth.is_authorized():
             return render_template(
                 'index.html',
                 title='Главная',
+                news_list=news_list,
+
             )
-        news_list = News.query.filter_by(user_id=auth.get_user().id)
+
         return render_template(
-            'my_profile.html',
+            'news-list.html',
             title="Главная",
             news_list=news_list
         )
@@ -54,7 +58,7 @@ def init_route(app, db):
             has_error = False
             login = ''
             if request.method == 'POST':
-                username = request.form['username']
+                username = form.username.data
 
                 if auth.login(username, request.form['password']):
                     return redirect('/')
@@ -91,7 +95,6 @@ def init_route(app, db):
             password = form.password.data
             about_me = form.about_me.data
             avatar = form.avatar.data
-
             user = User.query.filter_by(username=username).first()
             if user:
                 has_error = True
@@ -100,7 +103,7 @@ def init_route(app, db):
                     filename = secure_filename(avatar.filename)
                     avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                     User.add(username=username, password=password, email=email, about_me=about_me,
-                             avatar=filename)
+                             avatar='/' + filename)
                 else:
                     User.add(username=username, password=password, email=email, about_me=about_me,
                              avatar=url_for('static', filename='default.png'))
@@ -114,14 +117,24 @@ def init_route(app, db):
             has_email_error=has_email_error
         )
 
-    @app.route('/news', methods=['GET'])
-    def news_list():
+    @app.route('/profile', methods=['GET'])
+    def profile():
         if not auth.is_authorized():
             return redirect('/login')
-        news_list = News.query.filter_by(user_id=auth.get_user().id)
+        my_news_list = News.query.filter_by(user_id=auth.get_user().id)
 
         return render_template(
             'my_profile.html',
+            title="Мой профиль",
+            news_list=my_news_list
+        )
+
+    @app.route('/news', methods=['GET'])
+    def news_list():
+
+        news_list = News.query
+        return render_template(
+            'news-list.html',
             title="Новости",
             news_list=news_list
         )
@@ -144,13 +157,9 @@ def init_route(app, db):
 
     @app.route('/news/<int:id>')
     def news_view(id: int):
-        if not auth.is_authorized():
-            return redirect('/login')
         news = News.query.filter_by(id=id).first()
         if not news:
             abort(404)
-        if news.user_id != auth.get_user().id:
-            abort(403)
         user = news.user
         return render_template(
             'news-view.html',
@@ -189,7 +198,7 @@ def init_route(app, db):
             if avatar != '':
                 filename = secure_filename(avatar.filename)
                 avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                user.avatar = filename
+                user.avatar = '/' + filename
             users = User.query.filter_by(username=username).first()
             if users:
                 if username != user.username:

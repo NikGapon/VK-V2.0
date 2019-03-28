@@ -8,6 +8,7 @@ from wtforms.validators import DataRequired, Email
 class NewsCreateForm(FlaskForm):
     title = StringField('Заголовок новости', validators=[DataRequired()])
     content = TextAreaField('Текст новости', validators=[DataRequired()])
+
     submit = SubmitField('Добавить')
 
 
