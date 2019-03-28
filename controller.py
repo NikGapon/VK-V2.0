@@ -159,9 +159,8 @@ def init_route(app, db):
             return redirect('/sms')
         return render_template(
             'sms-new.html',
-            title='Зарегистрироваться',
+            title='Отправка сообщений',
             form=form,
-
         )
 
         # return render_template('sms-new.html', title='SMS')
