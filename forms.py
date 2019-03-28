@@ -13,10 +13,9 @@ class NewsCreateForm(FlaskForm):
 
 
 class SmsCreateForm(FlaskForm):
-    recipient = StringField('', validators=[DataRequired()])
+    recipient = StringField('Кому', validators=[DataRequired()])
     text = TextAreaField('Текст')
-
-    submit = SubmitField('Войти')
+    submit = SubmitField('Отправить')
 
 
 

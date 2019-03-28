@@ -151,7 +151,7 @@ def init_route(app, db):
         form = SmsCreateForm()
         if form.validate_on_submit():
             recipient = form.recipient.data
-            text = form.about_me.data
+            text = form.text.data
             sender = auth.get_user()
 
             Sms.add(recipient=recipient,  sender=sender, text=text)
