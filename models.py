@@ -27,12 +27,16 @@ class User(db.Model):
 class Sms(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipient = db.Column(db.String(100), unique=True, nullable=False)
-    sender = db.Column(db.String(100), unique=True, nullable=False)
+    user = db.relationship('User', backref=db.backref('sms', lazy=True))
     text = db.Column(db.String(1000), unique=False, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Sms {} {} {}>'.format(self.recipient, self.text, self.id)
 
     @staticmethod
-    def add(recipient, sender, text):
-        sms = Sms(recipient=recipient, sender=sender, text=text)
+    def add(recipient, user, text):
+        sms = Sms(recipient=recipient, user=user, text=text)
         db.session.add(sms)
         db.session.commit()
         return sms

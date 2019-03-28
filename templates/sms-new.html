@@ -10,14 +10,11 @@
 >
     {{ form.hidden_tag() }}
     <div class="card-body">
-
         <div class="form-group">
-
             <label for="{{ form.recipient.id }}">{{ form.recipient.label }}</label>
             {{ form.recipient(class_="form-control") }}
         </div>
         <div class="form-group">
-
             <p></p>
             <label for="{{ form.text.id }}">{{ form.text.label }}</label>
             {{ form.text(class_="form-control") }}

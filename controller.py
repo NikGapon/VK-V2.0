@@ -152,9 +152,7 @@ def init_route(app, db):
         if form.validate_on_submit():
             recipient = form.recipient.data
             text = form.text.data
-            sender = auth.get_user()
-
-            Sms.add(recipient=recipient,  sender=sender, text=text)
+            Sms.add(recipient=recipient,  user=auth.get_user(), text=text)
 
             return redirect('/sms')
         return render_template(
@@ -164,8 +162,6 @@ def init_route(app, db):
         )
 
         # return render_template('sms-new.html', title='SMS')
-
-
 
     @app.route('/news/create', methods=['GET', 'POST'])
     def news_create_form():
