@@ -15,13 +15,8 @@ def login(username, password):
     return False
 
 
-def chek_sms(username):
-    user = User.query.filter_by(username=username).first()
-    user1 = str(user)
+# def chek_sms():
 
-    if username in user1:
-        return True
-    return False
 
 
 def logout():

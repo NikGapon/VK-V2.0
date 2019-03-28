@@ -147,32 +147,29 @@ def init_route(app, db):
 
     @app.route('/sms-new', methods=['GET', 'POST'])
     def sms_new():
-        try:
 
-            form = SmsCreateForm()
+        form = UserCreateForm()
+        if form.validate_on_submit():
+            username = form.username.data
+            email = form.email.data
 
-            has_error = False
-            login = ''
+            about_me = form.about_me.data
 
-            if request.method == 'POST':
+            recipient = form.username.data
+            text = form.about_me.data
+            sender = form.username.data
 
-                username = form.username.data
+            User.add(username=username, password=password, email=email, about_me=about_me,
+                    avatar=url_for('static', filename='default.png'))
 
-
-                if auth.chek_sms(username):
-
-                    return redirect('/sms')
-
-                else:
-                    has_error = True
-            return render_template(
-                'sms-new.html',
-                title='Написать сообщение',
-                login=login,
-                has_error=has_error
-            )
-        except:
-            return redirect('/sms_error')
+            return redirect('/sms')
+        return render_template(
+            'registration.html',
+            title='Зарегистрироваться',
+            form=form,
+            has_error=has_error,
+            has_email_error=has_email_error
+        )
 
         # return render_template('sms-new.html', title='SMS')
 
