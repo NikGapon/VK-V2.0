@@ -1,10 +1,20 @@
 {% extends '__base_template.html' %}
 
 {% block content %}
-<h1>Написать сообщение</h1>
-<p> Кому </p>
-<p><input maxlength="100" name="adres" required="required" size="100" type="text" /></p>
-<p> Текс </p>
-<p><textarea cols="100" name="sms" required="required" rows="10"></textarea></p>
-<p><a href="/sms-new"> Отправить </a></p>
+<form action="/login" method="post" class="card">
+    <div class="card-body">
+        {% if has_error %}
+        <div class="alert alert-danger">Введеные неверные логин/пароль</div>
+        {% endif %}
+        <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" name="username" id="login" class="form-control" placeholder="Логин">
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Пароль">
+        </div>
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </div>
+</form>
 {% endblock %}

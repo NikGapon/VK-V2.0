@@ -7,7 +7,7 @@ from flask import render_template as flask_render_template
 from werkzeug.utils import secure_filename
 import extra.auth as auth
 from api.v1 import init as init_api_v1
-from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm
+from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm
 
 from models import User, News
 
@@ -139,12 +139,35 @@ def init_route(app, db):
             news_list=news_list
         )
 
+    @app.route('/sms_error')
+    def sms_error():
+        return render_template('sms_error.html', title='SMS')
+
+
+
     @app.route('/sms-new', methods=['GET', 'POST'])
     def sms_new():
-        if not auth.is_authorized():
-            return redirect('/login')
+        try:
+            form = SmsCreateForm()
+            has_error = False
+            login = ''
+            if request.method == 'POST':
+                username = form.username.data
 
-        return render_template('sms-new.html', title='SMS')
+                if auth.login(username, request.form['password']):
+                    return redirect('/sms')
+                else:
+                    has_error = True
+            return render_template(
+                'sms-new.html',
+                title='Написать сообщение',
+                login=login,
+                has_error=has_error
+            )
+        except:
+            return redirect('/sms_error')
+
+        # return render_template('sms-new.html', title='SMS')
 
 
 

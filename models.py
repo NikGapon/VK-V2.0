@@ -26,9 +26,9 @@ class User(db.Model):
 
 class Sms(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipient = db.Column(db.String(80), unique=True, nullable=False)
-    sender = db.Column(db.String(80), unique=True, nullable=False)
-    text = db.Column(db.String(80), unique=False, nullable=False)
+    recipient = db.Column(db.String(100), unique=True, nullable=False)
+    sender = db.Column(db.String(100), unique=True, nullable=False)
+    text = db.Column(db.String(1000), unique=False, nullable=False)
 
     @staticmethod
     def add(title, content, user):

@@ -12,6 +12,11 @@ class NewsCreateForm(FlaskForm):
     submit = SubmitField('Добавить')
 
 
+class SmsCreateForm(FlaskForm):
+    recipient = StringField('Кому', validators=[DataRequired()])
+    text = SubmitField()
+
+
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
