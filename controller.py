@@ -9,7 +9,7 @@ import extra.auth as auth
 from api.v1 import init as init_api_v1
 from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm
 
-from models import User, News
+from models import User, News, Sms
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -148,27 +148,20 @@ def init_route(app, db):
     @app.route('/sms-new', methods=['GET', 'POST'])
     def sms_new():
 
-        form = UserCreateForm()
+        form = SmsCreateForm()
         if form.validate_on_submit():
-            username = form.username.data
-            email = form.email.data
-
-            about_me = form.about_me.data
-
-            recipient = form.username.data
+            recipient = form.recipient.data
             text = form.about_me.data
-            sender = form.username.data
+            sender = auth.get_user()
 
-            User.add(username=username, password=password, email=email, about_me=about_me,
-                    avatar=url_for('static', filename='default.png'))
+            Sms.add(recipient=recipient,  sender=sender, text=text)
 
             return redirect('/sms')
         return render_template(
-            'registration.html',
+            'sms-new.html',
             title='Зарегистрироваться',
             form=form,
-            has_error=has_error,
-            has_email_error=has_email_error
+
         )
 
         # return render_template('sms-new.html', title='SMS')

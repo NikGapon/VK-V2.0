@@ -31,11 +31,13 @@ class Sms(db.Model):
     text = db.Column(db.String(1000), unique=False, nullable=False)
 
     @staticmethod
-    def add(title, content, user):
-        news = News(title=title, content=content, user=user)
-        db.session.add(news)
+    def add(recipient, sender, text):
+        sms = Sms(recipient=recipient, sender=sender, text=text)
+        db.session.add(sms)
         db.session.commit()
-        return news
+        return sms
+
+
 
     @staticmethod
     def delete(obj):

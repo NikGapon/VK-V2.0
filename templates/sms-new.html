@@ -6,15 +6,17 @@
         {% if has_error %}
         <div class="alert alert-danger"> Ошибка </div>
         {% endif %}
-        
+
         <div class="form-group">
-            <label for="login">Кому</label>
-            <input type="text" name="username" id="login" class="form-control" placeholder="Логин">
+            <label>Кому</label>
+            <label for="{{ form.recipient.id }}">{{ form.recipient.label }}</label>
+            {{ form.email(class_="form-control") }}
         </div>
         <div class="form-group">
             <label>Текст</label>
             <p></p>
-            <textarea cols="100" name="sms" required="required" rows="10"></textarea>
+            <label for="{{ form.about_me.id }}">{{ form.about_me.label }}</label>
+            {{ form.about_me(class_="form-control") }}
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </div>
