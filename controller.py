@@ -148,14 +148,21 @@ def init_route(app, db):
     @app.route('/sms-new', methods=['GET', 'POST'])
     def sms_new():
         try:
+
             form = SmsCreateForm()
+
             has_error = False
             login = ''
+
             if request.method == 'POST':
+
                 username = form.username.data
 
-                if auth.login(username, request.form['password']):
+
+                if auth.chek_sms(username):
+
                     return redirect('/sms')
+
                 else:
                     has_error = True
             return render_template(

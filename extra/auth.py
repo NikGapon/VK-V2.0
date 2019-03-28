@@ -7,9 +7,19 @@ from models import User
 
 def login(username, password):
     user = User.query.filter_by(username=username).first()
+
     if user and user.password == password:
         session['user_id'] = user.id
 
+        return True
+    return False
+
+
+def chek_sms(username):
+    user = User.query.filter_by(username=username).first()
+    user1 = str(user)
+
+    if username in user1:
         return True
     return False
 

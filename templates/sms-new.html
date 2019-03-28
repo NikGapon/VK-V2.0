@@ -1,20 +1,20 @@
 {% extends '__base_template.html' %}
 
 {% block content %}
-<form action="/login" method="post" class="card">
+<form action="/sms-new" method="post" class="card">
     <div class="card-body">
         {% if has_error %}
-        <div class="alert alert-danger">Введеные неверные логин/пароль</div>
+        <div class="alert alert-danger"> Ошибка </div>
         {% endif %}
         <div class="form-group">
-            <label for="login">Логин</label>
+            <label for="login">Кому</label>
             <input type="text" name="username" id="login" class="form-control" placeholder="Логин">
         </div>
         <div class="form-group">
-            <label for="password">Пароль</label>
+            <label for="password">Текст</label>
             <input type="password" name="password" id="password" class="form-control" placeholder="Пароль">
         </div>
-        <button type="submit" class="btn btn-primary">Войти</button>
+        <button type="submit" class="btn btn-primary">Отправить</button>
     </div>
 </form>
 {% endblock %}
