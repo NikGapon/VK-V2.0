@@ -43,8 +43,6 @@ class Sms(db.Model):
         db.session.commit()
 
 
-
-
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=False, nullable=False)

@@ -221,7 +221,5 @@ def init_route(app, db):
         if not auth.is_authorized():
             return redirect('/login')
 
-
-
-        return render_template()
+        return render_template('sms.html', title='SMS')
 
