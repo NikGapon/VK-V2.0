@@ -249,6 +249,10 @@ def init_route(app, db):
             has_error=has_error
         )
 
+    @app.route('/game', methods=['GET'])
+    def game():
+        return render_template('game.html', title='GAME')
+
     @app.route('/sms', methods=['GET'])
     def sms():
 
