@@ -1,39 +1,10 @@
 {% extends '__base_template.html' %}
 
 {% block content %}
-<h1>Редактировать профиль</h1>
-<form
-        action="/edit_profile"
-        method="post"
-        enctype="multipart/form-data"
-        class="card"
->
-    {% if has_error %}
-        <div class="alert alert-danger">Пользователь с таким именем уже существует</div>
-    {% endif %}
-    {{ form.hidden_tag() }}
-    <div class="card-body">
-        <div class="form-group">
-            <label for="{{ form.username.id }}">{{ form.username.label }}</label>
-            {{ form.username(class_="form-control") }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.email.id }}">{{ form.email.label }}</label>
-            {{ form.email(class_="form-control") }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.password.id }}">{{ form.password.label }}</label>
-            {{ form.password(class_="form-control") }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.about_me.id }}">{{ form.about_me.label }}</label>
-            {{ form.about_me(class_="form-control") }}
-        </div>
-        <div class="form-group">
-            <label for="{{ form.avatar.id }}">{{ form.avatar.label }}</label>
-            {{ form.avatar(class_="form-control") }}
-        </div>
-        {{ form.submit(class_="btn btn-primary") }}
-    </div>
-</form>
+<h1>Написать сообщение</h1>
+<p> Кому </p>
+<p><input maxlength="100" name="adres" required="required" size="100" type="text" /></p>
+<p> Текс </p>
+<p><textarea cols="100" name="sms" required="required" rows="10"></textarea></p>
+<p><a href="/sms-new"> Отправить </a></p>
 {% endblock %}

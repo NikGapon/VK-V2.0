@@ -139,6 +139,15 @@ def init_route(app, db):
             news_list=news_list
         )
 
+    @app.route('/sms-new', methods=['GET', 'POST'])
+    def sms_new():
+        if not auth.is_authorized():
+            return redirect('/login')
+
+        return render_template('sms-new.html', title='SMS')
+
+
+
     @app.route('/news/create', methods=['GET', 'POST'])
     def news_create_form():
         if not auth.is_authorized():
