@@ -1,43 +1,14 @@
 {% extends "__base_template.html" %}
 
 {% block content %}
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-<script type="text/javascript" charset="utf-8">
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
-    socket.on('connect', function() {
-        socket.emit('my event', {data: 'I\'m connected!'});
-    });
-</script>
-<div class="row" xmlns="http://www.w3.org/1999/html">
-    <div class="col align-self-center">
-        <h3>{{ auth_user.username }}</h3>
-        <!-- TODO -->
-    </div>
-
-</div>
-<div>
-    <p>{{ auth_user.about_me }}</p>
-</div>
-<img  src="{{auth_user.avatar}}" width="300px" height="300px">
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Мои сообщения</h5>
-        {% if news_list  %}
-        <ul class="card-text">
-            {% for news in news_list %}
-            <li><a href="/news/{{ news.id }}">{{news.title}} </a>
-                {% if auth_user and auth_user.id == news.user_id %}
-                (<a href="/news/delete/{{ news.id }}">удалить</a>)
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        Вам никто не пишет
-        {% endif %}
-        {% if auth_user %}
-        <a href="/news/create" class="card-link">Создать</a>
-        {% endif %}
-    </div>
-</div>
+<h5>Мои сообщения</h5>
+{% if news_list  %}
+    <p><span class="Button">1 </span></p>
+    <p><span class="Button">2 </span></p>
+    <p><span class="Button">3 </span></p>
+    <p><span class="Button">4 </span></p>
+    <p><span class="Button">5 </span></p>
+{% else %}
+<p>Вам никто не пишет </p>
+{% endif %}
 {% endblock %}
