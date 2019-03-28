@@ -152,6 +152,10 @@ def init_route(app, db):
         if form.validate_on_submit():
             recipient = form.recipient.data
             text = form.text.data
+            print(auth.get_user())
+            print(recipient)
+            if recipient == auth.get_user():
+                return redirect('/sms_error')
             Sms.add(recipient=recipient,  user=auth.get_user(), text=text)
 
             return redirect('/sms')

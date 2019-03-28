@@ -26,7 +26,7 @@ class User(db.Model):
 
 class Sms(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipient = db.Column(db.String(100), unique=True, nullable=False)
+    recipient = db.Column(db.String(100), unique=False, nullable=False)
     user = db.relationship('User', backref=db.backref('sms', lazy=True))
     text = db.Column(db.String(1000), unique=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
