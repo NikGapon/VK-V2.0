@@ -32,7 +32,7 @@ class Sms(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return '{}'.format(self.recipient)
+        return "{}, {}".format(self.user.username, self.recipient)
 
     @staticmethod
     def add(recipient, user, text):
