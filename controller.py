@@ -273,7 +273,7 @@ def init_route(app, db):
             print(2222222222222222)
             print(cip, auth.get_user(), text)
             Sms.add(recipient=cip, user=auth.get_user(), text=text)
-            return redirect('/sms')
+            return redirect('/dialog/<int:id>')
         return render_template(
             'dialog.html',
             title='Диалоги',
