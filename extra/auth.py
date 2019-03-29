@@ -5,6 +5,14 @@ from flask import session
 from models import User
 
 
+class See_chek():
+    def __init__(self):
+        self.p = 0
+    def add_p(self, p):
+        self.p = p
+    def chek_p(self):
+        return self.p
+
 def login(username, password):
     user = User.query.filter_by(username=username).first()
 
@@ -15,7 +23,7 @@ def login(username, password):
     return False
 
 
-# def chek_sms():
+
 
 
 

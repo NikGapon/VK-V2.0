@@ -3,12 +3,10 @@
 {% block content %}
 <h5>Мои сообщения</h5>
 <p><a href="/sms-new"> + </a></p>
-{% if news_list  %}
-    <p><span class="Button">1 </span></p>
-    <p><span class="Button">2 </span></p>
-    <p><span class="Button">3 </span></p>
-    <p><span class="Button">4 </span></p>
-    <p><span class="Button">5 </span></p>
+{% if Proverka  %}
+    <p><a href="/sms-1"> 1 </a></p>
+    <p><a href="/sms-2"> 2 </a></p>
+    <p><a href="/sms-3"> 3 </a></p>
 {% else %}
 <p>Вам никто не пишет </p>
 {% endif %}

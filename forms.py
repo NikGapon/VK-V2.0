@@ -34,6 +34,10 @@ class UserCreateForm(FlaskForm):
     avatar = FileField()
     submit = SubmitField('Создать')
 
+class SmsSee(FlaskForm):
+    text = TextAreaField('Текст')
+    submit = SubmitField('Отправить')
+
 
 class EditProfileForm(FlaskForm):
     username = StringField('Логин')

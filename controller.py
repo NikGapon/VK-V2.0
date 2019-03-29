@@ -7,10 +7,11 @@ from flask import render_template as flask_render_template
 from werkzeug.utils import secure_filename
 import extra.auth as auth
 from api.v1 import init as init_api_v1
-from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm
+from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm, SmsSee
 
 from models import User, News, Sms
 
+Ter_pol = auth.See_chek()
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
@@ -258,6 +259,27 @@ def init_route(app, db):
 
         if not auth.is_authorized():
             return redirect('/login')
+        #user_r = auth.get_user()
+        #all = Sms.execute("SELECT * FROM news WHERE recipient = ?", (str(user_r),))
+        #print(all)
+        if Sms.query.filter_by(recipient=auth.get_user().id):
+            Proverka = True
 
-        return render_template('sms.html', title='SMS')
+        return render_template('sms.html', title='SMS', Proverka=Proverka)
+
+    @app.route('/sms-1', methods=['GET', 'POST'])
+    def sms_1():
+        form = SmsSee()
+        if form.validate_on_submit():
+            recipient = form.recipient.data
+            text = form.text.data
+
+            Sms.add(recipient=recipient, user=auth.get_user(), text=text)
+
+            return redirect('/sms')
+        return render_template(
+            'sms-new.html',
+            title='Отправка сообщений',
+            form=form,
+        )
 
