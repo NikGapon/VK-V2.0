@@ -258,10 +258,22 @@ def init_route(app, db):
     def dialog(id: int):
         form = DialogForm()
         messages = Sms.query.filter_by(id=id).first()
+        messag = Sms.query.filter_by(id=id).first()
+        messag = str(messag)
+
+        text = form.text.data
+        cip = ''
+        for o in messag:
+            if o != ' ':
+                cip += o
+            else:
+                break
+
         if form.validate_on_submit():
-            text = form.text.data
-
-
+            print(2222222222222222)
+            print(cip, auth.get_user(), text)
+            Sms.add(recipient=cip, user=auth.get_user(), text=text)
+            return redirect('/sms')
         return render_template(
             'dialog.html',
             title='Диалоги',

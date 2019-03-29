@@ -7,7 +7,8 @@
 
     <ul class="card-text">
             {% for message in messages %}
-                <a href="/dialog/{{ message.id }}">{{ message.id }}</a>
+                <a href="/dialog/{{ message.id }}">{{ message }}</a>
+
             {% endfor %}
     </ul>
 {% else %}
