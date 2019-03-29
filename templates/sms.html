@@ -4,9 +4,12 @@
 <h5>Мои сообщения</h5>
 <p><a href="/sms-new"> + </a></p>
 {% if Proverka  %}
-    <p><a href="/sms-1"> 1 </a></p>
-    <p><a href="/sms-2"> 2 </a></p>
-    <p><a href="/sms-3"> 3 </a></p>
+
+    <ul class="card-text">
+            {% for message in messages %}
+                <a href="/dialog/{{ message.id }}">{{ message.id }}</a>
+            {% endfor %}
+    </ul>
 {% else %}
 <p>Вам никто не пишет </p>
 {% endif %}

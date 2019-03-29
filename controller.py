@@ -7,7 +7,7 @@ from flask import render_template as flask_render_template
 from werkzeug.utils import secure_filename
 import extra.auth as auth
 from api.v1 import init as init_api_v1
-from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm, SmsSee
+from forms import UserCreateForm, NewsCreateForm, EditProfileForm, LoginForm, SmsCreateForm, SmsSee, DialogForm
 
 from models import User, News, Sms
 
@@ -254,11 +254,27 @@ def init_route(app, db):
     def game():
         return render_template('game.html', title='GAME')
 
+    @app.route('/dialog/<int:id>', methods=['GET'])
+    def dialog(id: int):
+        form = DialogForm()
+        messages = Sms.query.filter_by(id=id).first()
+        if form.validate_on_submit():
+            text = form.text.data
+
+
+        return render_template(
+            'dialog.html',
+            title='Диалоги',
+            form=form
+
+        )
+
+
     @app.route('/sms', methods=['GET'])
     def sms():
         recipients = Sms.query.all()
         print(recipients)
-
+        messages = Sms.query
 
         if not auth.is_authorized():
             return redirect('/login')
@@ -268,7 +284,7 @@ def init_route(app, db):
         if Sms.query.filter_by(recipient=auth.get_user().id):
             Proverka = True
 
-        return render_template('sms.html', title='SMS', Proverka=Proverka)
+        return render_template('sms.html', title='SMS', Proverka=Proverka, messages=messages)
 
     @app.route('/sms-1', methods=['GET', 'POST'])
     def sms_1():

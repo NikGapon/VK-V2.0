@@ -17,7 +17,9 @@ class SmsCreateForm(FlaskForm):
     text = TextAreaField('Текст')
     submit = SubmitField('Отправить')
 
-
+class DialogForm(FlaskForm):
+    text = TextAreaField('Текст')
+    submit = SubmitField('Отправить')
 
 
 class LoginForm(FlaskForm):
