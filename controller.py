@@ -256,6 +256,9 @@ def init_route(app, db):
 
     @app.route('/sms', methods=['GET'])
     def sms():
+        recipients = Sms.query.all()
+        print(recipients)
+
 
         if not auth.is_authorized():
             return redirect('/login')
