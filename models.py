@@ -31,8 +31,21 @@ class Sms(db.Model):
     text = db.Column(db.String(1000), unique=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    def poisk(self, t):
+        with open('re_t.txt', mode='w') as f:
+            f.write(t)
+
+
     def __repr__(self):
-        return "{} => {}".format(self.user.username, self.recipient)
+        with open('re_t.txt') as f:
+            self.t = f.read()
+        if self.t == '0':
+            with open('re_t.txt', mode='w') as f:
+                f.write("1")
+            return "{}".format(self.text)
+        else:
+            return "{} => {}".format(self.user.username, self.recipient)
+
 
     @staticmethod
     def add(recipient, user, text):

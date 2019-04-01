@@ -250,40 +250,43 @@ def init_route(app, db):
             has_error=has_error
         )
 
-    @app.route('/game', methods=['GET'])
+    @app.route('/game', methods=['GET', 'POST'])
     def game():
         return render_template('game.html', title='GAME')
 
     @app.route('/dialog/<int:id>', methods=['GET'])
     def dialog(id: int):
-        form = DialogForm()
+
         messages = Sms.query.filter_by(id=id).first()
-        messag = Sms.query.filter_by(id=id).first()
-        messag = str(messag)
-
-        text = form.text.data
-        cip = ''
-        for o in messag:
-            if o != ' ':
-                cip += o
-            else:
-                break
-
+        with open('re_t.txt', mode='w') as f:
+            f.write("0")
+        gg_text = Sms.query.filter_by(id=id).first_or_404()
+        form = DialogForm()
         if form.validate_on_submit():
-            print(2222222222222222)
-            print(cip, auth.get_user(), text)
+            messag = Sms.query.filter_by(id=id).first()
+            messag = str(messag)
+
+            text = form.text.data
+            cip = ''
+            for o in messag:
+                if o != ' ':
+                    cip += o
+                else:
+                    break
+
             Sms.add(recipient=cip, user=auth.get_user(), text=text)
             return redirect('/dialog/<int:id>')
         return render_template(
             'dialog.html',
             title='Диалоги',
-            form=form
-
+            form=form,
+            gg_text=gg_text
         )
 
 
     @app.route('/sms', methods=['GET'])
     def sms():
+
         recipients = Sms.query.all()
         print(recipients)
         messages = Sms.query
